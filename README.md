@@ -6,13 +6,50 @@ Repository tugas dan modul praktikum perkuliahan **Pemrograman Mobile** berbasis
 
 ## 👤 Informasi Mahasiswa
 
-| Identitas | Keterangan |
-| :--- | :--- |
-| **Nama Lengkap** | Nabhan Rizqi Julian Saputro |
-| **NIM** | `2341720255` |
-| **Kelas** | D-IV Teknik Informatika |
-| **Mata Kuliah** | Pemrograman Mobile |
-| **Semester** | Genap / Tahun Akademik 2025/2026 |
+
+| Identitas        | Keterangan                       |
+| :----------------- | :--------------------------------- |
+| **Nama Lengkap** | Nabhan Rizqi Julian Saputro      |
+| **NIM**          | `2341720255`                     |
+| **Kelas**        | D-IV Teknik Informatika          |
+| **Mata Kuliah**  | Pemrograman Mobile               |
+| **Semester**     | Genap / Tahun Akademik 2025/2026 |
+
+---
+
+## 🛠️ Panduan Pembuatan Folder / Modul Flutter Baru
+
+Untuk membuat folder project modul Flutter baru di dalam repositori ini, ikuti langkah-langkah berikut:
+
+1. **Buka terminal** pada direktori utama (root) repositori:
+
+   ```bash
+   cd 2341720255-mobile-course
+   ```
+2. **Jalankan perintah `flutter create`** dengan format penamaan modul `_XX_week_X_<nama_modul_snake_case>`:
+
+   ```bash
+   flutter create _XX_week_X_nama_topik
+   ```
+
+   > **Contoh (Modul Minggu ke-2):**
+   >
+   > ```bash
+   > flutter create _02_week_2_declarative_ui_responsive_design
+   > ```
+   >
+3. **Masuk ke direktori modul yang baru dibuat**:
+
+   ```bash
+   cd _02_week_2_declarative_ui_responsive_design
+   ```
+4. **Unduh dependensi proyek**:
+
+   ```bash
+   flutter pub get
+   ```
+5. **Tambahkan folder & file dokumentasi pendukung**:
+   Buat folder `screenshots/` dan `README.md` pada modul terkait untuk melengkapi dokumentasi laporan mingguan.
 
 ---
 
@@ -112,46 +149,48 @@ Format penamaan direktori setiap modul praktikum menggunakan konvensi `_XX_week_
 
 ## 🗺️ Silabus & Matriks Pembelajaran 16 Minggu
 
-| Minggu | Modul & Topik | Status | Dokumen |
-| :---: | :--- | :---: | :---: |
-| **01** | Mobile Development Ecosystem & Flutter Refresh | ✅ Selesai | [Modul 01](./_01_week_1_mobile_development_ecosystem_flutter_refresh/README.md) |
-| **02** | Declarative UI & Responsive Design | 🔄 Berjalan | [Modul 02](./_02_week_2_declarative_ui_responsive_design/README.md) |
-| **03** | Navigation & State Management | ⏳ Terjadwal | - |
-| **04** | Networking & REST API Integration | ⏳ Terjadwal | - |
-| **05** | Local Storage & Offline-First Persistence | ⏳ Terjadwal | - |
-| **06** | Authentication, Mobile Security & FCM | ⏳ Terjadwal | - |
-| **07** | Clean Architecture & Domain-Driven Design | ⏳ Terjadwal | - |
-| **08** | Mid-Project Review & Architecture Audit | ⏳ Terjadwal | - |
-| **09** | AI-Assisted Development Workflows | ⏳ Terjadwal | - |
-| **10** | AI Feature Integration & Smart Services | ⏳ Terjadwal | - |
-| **11** | Performance Optimization & Memory Profiling | ⏳ Terjadwal | - |
-| **12** | Testing & Quality Assurance (Unit, Widget, Golden) | ⏳ Terjadwal | - |
-| **13** | CI/CD Pipeline & Automated Build Workflows | ⏳ Terjadwal | - |
-| **14** | Deployment, App Store Prep & Monitoring | ⏳ Terjadwal | - |
-| **15** | Secure Mobile Development & Data Encryption | ⏳ Terjadwal | - |
-| **16** | Final Project Expo, Showcase & Portfolio | ⏳ Terjadwal | - |
+
+| Minggu | Modul & Topik                                      |    Status    |                                     Dokumen                                     |
+| :------: | :--------------------------------------------------- | :------------: | :-------------------------------------------------------------------------------: |
+| **01** | Mobile Development Ecosystem & Flutter Refresh     |  ✅ Selesai  | [Modul 01](./_01_week_1_mobile_development_ecosystem_flutter_refresh/README.md) |
+| **02** | Declarative UI & Responsive Design                 |  ✅ Selesai  |       [Modul 02](./_02_week_2_declarative_ui_responsive_design/README.md)       |
+| **03** | Navigation & State Management                      | ⏳ Terjadwal |                                        -                                        |
+| **04** | Networking & REST API Integration                  | ⏳ Terjadwal |                                        -                                        |
+| **05** | Local Storage & Offline-First Persistence          | ⏳ Terjadwal |                                        -                                        |
+| **06** | Authentication, Mobile Security & FCM              | ⏳ Terjadwal |                                        -                                        |
+| **07** | Clean Architecture & Domain-Driven Design          | ⏳ Terjadwal |                                        -                                        |
+| **08** | Mid-Project Review & Architecture Audit            | ⏳ Terjadwal |                                        -                                        |
+| **09** | AI-Assisted Development Workflows                  | ⏳ Terjadwal |                                        -                                        |
+| **10** | AI Feature Integration & Smart Services            | ⏳ Terjadwal |                                        -                                        |
+| **11** | Performance Optimization & Memory Profiling        | ⏳ Terjadwal |                                        -                                        |
+| **12** | Testing & Quality Assurance (Unit, Widget, Golden) | ⏳ Terjadwal |                                        -                                        |
+| **13** | CI/CD Pipeline & Automated Build Workflows         | ⏳ Terjadwal |                                        -                                        |
+| **14** | Deployment, App Store Prep & Monitoring            | ⏳ Terjadwal |                                        -                                        |
+| **15** | Secure Mobile Development & Data Encryption        | ⏳ Terjadwal |                                        -                                        |
+| **16** | Final Project Expo, Showcase & Portfolio           | ⏳ Terjadwal |                                        -                                        |
 
 ---
 
 ## 🚀 Panduan Menjalankan Proyek
 
 1. **Clone repositori**:
+
    ```bash
    git clone <url-repository>
    cd 2341720255-mobile-course
    ```
-
 2. **Masuk ke folder minggu yang ingin dijalankan**:
+
    ```bash
    cd _01_week_1_mobile_development_ecosystem_flutter_refresh
    ```
-
 3. **Install dependensi Flutter**:
+
    ```bash
    flutter pub get
    ```
-
 4. **Jalankan aplikasi**:
+
    ```bash
    flutter run
    ```
