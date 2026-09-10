@@ -16,6 +16,12 @@ class HomePage extends StatelessWidget {
             tooltip: 'Halaman Produk',
             onPressed: () => context.go('/products'),
           ),
+          // Tombol menuju AI Challenge StatsPage
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            tooltip: 'Statistik (AI Challenge)',
+            onPressed: () => context.go('/stats'),
+          ),
         ],
       ),
       body: ListView.builder(

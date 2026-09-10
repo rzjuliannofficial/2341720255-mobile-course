@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'pages/detail_page.dart';
 import 'pages/home_page.dart';
 import 'pages/product_page.dart';
+import 'pages/stats_page.dart';
 
 void main() => runApp(const ProviderScope(child:MyApp()));
 
@@ -23,6 +24,10 @@ final _router = GoRouter(
         GoRoute(
           path: 'products',
           builder: (context, _) => const ProductPage(),
+        ),
+        GoRoute(
+          path: 'stats',
+          builder: (context, _) => const StatsPage(),
         ),
       ],
     ),
