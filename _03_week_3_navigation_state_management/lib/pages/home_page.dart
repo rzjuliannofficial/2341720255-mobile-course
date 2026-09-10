@@ -7,7 +7,17 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          // Tombol di AppBar menuju halaman produk (Riverpod AsyncValue)
+          IconButton(
+            icon: const Icon(Icons.shopping_bag),
+            tooltip: 'Halaman Produk',
+            onPressed: () => context.go('/products'),
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) => ListTile(
@@ -18,3 +28,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
