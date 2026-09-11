@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/todo_provider.dart';
 import '../widgets/todo_tile.dart';
 
@@ -72,6 +73,7 @@ class TodoPage extends ConsumerWidget {
                 final todo = todos[index];
                 return TodoTile(
                   todo: todo,
+                  onTap: () => context.go('/detail/${todo.id}'),
                   onToggle: (_) =>
                       ref.read(todoListProvider.notifier).toggle(todo.id),
                   onDelete: () =>

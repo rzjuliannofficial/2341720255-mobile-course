@@ -6,12 +6,14 @@ class TodoTile extends StatelessWidget {
   final Todo todo;
   final ValueChanged<bool?> onToggle;
   final VoidCallback onDelete;
+  final VoidCallback? onTap;
 
   const TodoTile({
     super.key,
     required this.todo,
     required this.onToggle,
     required this.onDelete,
+    this.onTap,
   });
 
   @override
@@ -21,6 +23,7 @@ class TodoTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
+        onTap: onTap,
         leading: Checkbox(
           value: todo.done,
           onChanged: onToggle,
