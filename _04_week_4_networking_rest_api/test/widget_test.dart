@@ -1,30 +1,70 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:_04_week_4_networking_rest_api/data/models/post.dart';
+import 'package:_04_week_4_networking_rest_api/data/providers.dart';
+import 'package:_04_week_4_networking_rest_api/data/repositories/post_repository.dart';
 import 'package:_04_week_4_networking_rest_api/main.dart';
+import 'package:_04_week_4_networking_rest_api/widgets/post_state_views.dart';
+
+class _FakePostRepositoryForWidgetTest implements PostRepository {
+  @override
+  Future<List<Post>> fetchPosts() async => [];
+
+  @override
+  Future<List<Post>> fetchPostsPage({required int page, int limit = 10}) async {
+    return [
+      const Post(
+        userId: 1,
+        id: 1,
+        title: 'Spotify Track Title',
+        body: 'Spotify Track Description',
+      ),
+    ];
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App renders correctly with Spotify theme smoke test',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          postRepositoryProvider.overrideWithValue(
+            _FakePostRepositoryForWidgetTest(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Initial render: memverifikasi bahwa indikator loading / app bar Spotify muncul
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Jalankan pumpAndSettle dengan fake repository agar asynchronous microtask selesai
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Memverifikasi teks header dan item list post
+    expect(find.byType(ListView), findsOneWidget);
+  });
+
+  testWidgets('PostListErrorView renders friendly error and retry button',
+      (WidgetTester tester) async {
+    bool retryClicked = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PostListErrorView(
+            error: Exception('Error jaringan'),
+            onRetry: () => retryClicked = true,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Coba lagi'), findsOneWidget);
+    await tester.tap(find.text('Coba lagi'));
+    expect(retryClicked, isTrue);
   });
 }

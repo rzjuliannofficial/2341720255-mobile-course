@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../data/models/post.dart';
+import '../../data/models/post.dart';
 
-/// Reusable Widget untuk menampilkan satu baris item post
+/// Reusable Widget untuk menampilkan satu baris item post praktikum
 class PostItemTile extends StatelessWidget {
   const PostItemTile({super.key, required this.post});
 

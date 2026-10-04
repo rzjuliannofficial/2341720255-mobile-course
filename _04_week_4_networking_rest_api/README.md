@@ -122,3 +122,66 @@ Jelaskan setiap bagian kode dalam komentar.
 - **Bukti Screenshot / Output Terminal**:
 
   ![Praktikum 7 - Test Passed](screenshots/praktikum_7_test_passed.png)
+
+---
+
+## 8. Mini Project: Feeds REST API
+
+### 1. Karakteristik & Desain UI
+
+- **Visual Atmosphere**: Mengadopsi *content-first darkness* bertema near-black (`#121212`, `#181818`, `#1F1F1F`).
+- **Brand Accent**: Menggunakan aksen hijau segar (`#1ED760`) untuk play/refresh icon, badge ID post, dan tombol aksi utama.
+- **Pill Geometry**: Menerapkan rounded corners tactile 8px pada kartu post dan tombol berbentuk full-pill (`borderRadius: 9999px`) dengan gaya label uppercase bertrik spasi huruf (`letter-spacing: 1.4`).
+- **Four UI States**:
+  1. **Loading State**: `SpotifyLoadingView` dengan spinner hijau kontras.
+  2. **Error State**: `SpotifyErrorView` dengan ikon semantic red (`#F3727F`) dan tombol pill "COBA LAGI".
+  3. **Empty State**: `SpotifyEmptyView` dengan ikon library dan teks abu-abu perak (`#B3B3B3`).
+  4. **Success State**: Daftar post dengan infinite scroll dan custom `RefreshIndicator`.
+
+### 2. Bukti Screenshot Mini Project Feeds
+
+- **Deskripsi**: Tampilan feed post dengan tema gelap imersif, infinite pagination, dan card elevated.
+- **Bukti Screenshot**:
+
+  ![Mini Project Feeds](screenshots/mini_project_feeds.png)
+
+---
+
+r## 💡 9. Jawaban Refleksi Praktikum
+
+### 1. Mengapa UI dilarang memanggil Dio langsung? Apa yang rusak jika aturan ini dilanggar?
+
+> **Jawaban**:UI dilarang memanggil Dio secara langsung demi mematuhi prinsip **Separation of Concerns (SoC)** dan **Dependency Inversion**:
+>
+> - **Kerapuhan Kode (Coupling Tinggi)**: Jika UI memanggil Dio langsung, komponen antarmuka menjadi terikat erat (*tightly coupled*) pada implementasi library jaringan tertentu. Jika suatu saat Dio diganti atau endpoint berubah, seluruh file halaman UI harus ikut diubah.
+> - **Ketidakmampuan Menjalankan Unit Test Terisolasi**: UI yang memanggil Dio langsung tidak dapat diuji secara otomatis tanpa memicu request HTTP sungguhan (membutuhkan koneksi internet aktif dan server hidup).
+> - **Bocornya Tanggung Jawab Error Handling**: Exception mentah seperti *SocketException* atau *HandshakeException* akan terekspos langsung ke lapisan presentasi, merusak kebersihan logika visual dan meningkatkan risiko crash aplikasi.
+
+### 2. Kapan pagination client-side cukup, dan kapan harus mengandalkan pagination server (`_page`/`_limit`)?
+
+> **Jawaban**:
+>
+> - **Pagination Client-Side Cukup**: Ketika total volume data dari server berukuran kecil dan tetap (misal: di bawah 50–100 item seperti daftar kategori, opsi pengaturan, atau daftar provinsi). Data dapat diunduh sekaligus pada awal aplikasi, kemudian pemfilteran atau pemecahan halaman dilakukan secara instan di memori perangkat tanpa latensi jaringan.
+> - **Wajib Mengandalkan Pagination Server (`_page`/`_limit`)**: Ketika volume data berjumlah ratusan, ribuan, atau terus bertambah tanpa batas (seperti feed media sosial, katalog marketplace, log transaksi, atau daftar artikel). Mengunduh seluruh data sekaligus akan memboroskan kuota internet pengguna, memicu lonjakan penggunaan memori RAM (OOM), dan menyebabkan waktu tunggu *loading* awal menjadi sangat lambat.
+
+### 3. Bagaimana exception repository berubah menjadi `AsyncError` tanpa `try/catch` di setiap widget? Kapan `try/catch` eksplisit tetap dibutuhkan?
+
+> **Jawaban**:
+>
+> - **Mekanisme Otomatis**: Di Riverpod 3.x, method `build()` pada `AsyncNotifier` (atau callback pada `FutureProvider`) secara otomatis membungkus eksekusi `Future` ke dalam deklaratif guard. Ketika repository melempar exception (misalnya `DioException`), runtime Riverpod mencegat exception beserta stack trace-nya, lalu secara otomatis mengonversi state provider menjadi `AsyncError(error, stackTrace)`. Widget UI yang memanggil `ref.watch(provider).when(...)` cukup mendengarkan cabang `error:` tanpa perlu menulis blok `try/catch`.
+> - **Kapan `try/catch` Eksplisit Tetap Dibutuhkan?**:
+>   1. Pada **event handler interaktif / mutasi** (seperti tombol submit formulir, tombol hapus, atau method `refresh()`), di mana aksi dipicu oleh interaksi pengguna di luar siklus deklaratif `build()`.
+>   2. Ketika ingin melakukan **tindakan sampingan (*side-effects*) spesifik**, seperti mencatat log lokal, menampilkan `SnackBar`, atau memetakan exception teknis ke domain error sebelum state diperbarui.
+
+### 4. Bagian mana dari hasil AI yang Anda perbaiki, dan mengapa?
+
+> **Jawaban**:Berdasarkan pengujian pada AI Challenge, beberapa bagian penting dari hasil awal AI yang diperbaiki meliputi:
+>
+> 1. **Peningkatan Ketahanan Null-Safety Model (`Comment.fromJson`)**:
+>    - *Sebelumnya*: Kode awal AI menggunakan casting langsung `(json['postId'] as int)` yang rentan crash (*type cast exception*) jika API mengembalikan angka bertipe `double`, `num`, atau `null`.
+>    - *Perbaikan*: Diubah menjadi `(json['postId'] as num?)?.toInt() ?? 0` serta menambahkan fallback string default `''` untuk mencegah crash pada respons yang tidak terduga.
+> 2. **Pembaruan Arsitektur Provider ke Riverpod 3.x Modern**:
+>    - *Sebelumnya*: AI menggunakan `StateProvider` yang sudah usang (*deprecated*) serta sintaks `FamilyAsyncNotifier` yang tidak kompatibel.
+>    - *Perbaikan*: Direfaktor menggunakan `NotifierProvider<SelectedPostIdNotifier, int>` dan `AsyncNotifier<List<Comment>>` murni yang reaktif membaca `ref.watch()`.
+> 3. **Penyempurnaan Pemetaan Pesan Error Jaringan**:
+>    - *Perbaikan*: Memetakan status 404, error 500+, dan berbagai varian timeout ke dalam pesan ramah pengguna berbahasa Indonesia yang jelas dan dapat ditindaklanjuti (menampilkan tombol coba lagi).
