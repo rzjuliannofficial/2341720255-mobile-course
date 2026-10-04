@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/providers.dart';
+import '../widgets/post_item_tile.dart';
+import '../widgets/post_state_views.dart';
 
 class PostListPage extends ConsumerWidget {
   const PostListPage({super.key});
@@ -21,48 +23,22 @@ class PostListPage extends ConsumerWidget {
         ],
       ),
       body: postsAsync.when(
-        loading: () =>
-            const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(friendlyErrorMessage(err),
-                    textAlign: TextAlign.center),
-                const SizedBox(height: 12),
-                FilledButton(
-                  onPressed: () => ref.invalidate(postListProvider),
-                  child: const Text('Coba lagi'),
-                ),
-              ],
-            ),
-          ),
+        loading: () => const PostListLoadingView(),
+        error: (err, _) => PostListErrorView(
+          error: err,
+          onRetry: () => ref.invalidate(postListProvider),
         ),
         data: (posts) {
           if (posts.isEmpty) {
-            return const Center(
-                child: Text('Belum ada data dari server.'));
+            return const PostListEmptyView();
           }
           return RefreshIndicator(
             onRefresh: () =>
                 ref.read(postListProvider.notifier).refresh(),
             child: ListView.builder(
               itemCount: posts.length,
-              itemBuilder: (context, index) {
-                final post = posts[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                      child: Text(post.id.toString())),
-                  title: Text(post.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: Text(post.body,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis),
-                );
-              },
+              itemBuilder: (context, index) =>
+                  PostItemTile(post: posts[index]),
             ),
           );
         },
