@@ -154,9 +154,9 @@ Format penamaan direktori setiap modul praktikum menggunakan konvensi `_XX_week_
 | :------: | :--------------------------------------------------- | :------------: | :-------------------------------------------------------------------------------: |
 | **01** | Mobile Development Ecosystem & Flutter Refresh     |  ✅ Selesai  | [Modul 01](./_01_week_1_mobile_development_ecosystem_flutter_refresh/README.md) |
 | **02** | Declarative UI & Responsive Design                 |  ✅ Selesai  |       [Modul 02](./_02_week_2_declarative_ui_responsive_design/README.md)       |
-| **03** | Navigation & State Management                      |  ✅ Selesai  |          [Modul 03](./_03_week_3_navigation_state_management/README.md)         |
-| **04** | Networking & REST API Integration                  |  ✅ Selesai  |                [Modul 04](./_04_week_4_networking_rest_api/README.md)            |
-| **05** | Local Storage & Offline-First Persistence          | ⏳ Terjadwal |                                        -                                        |
+| **03** | Navigation & State Management                      |  ✅ Selesai  |         [Modul 03](./_03_week_3_navigation_state_management/README.md)         |
+| **04** | Networking & REST API Integration                  |  ✅ Selesai  |             [Modul 04](./_04_week_4_networking_rest_api/README.md)             |
+| **05** | Local Storage & Offline-First Persistence          |  ✅ Selesai  |     [Modul 05](./_05_week_5_local_storage_offline_first/README.md)     |
 | **06** | Authentication, Mobile Security & FCM              | ⏳ Terjadwal |                                        -                                        |
 | **07** | Clean Architecture & Domain-Driven Design          | ⏳ Terjadwal |                                        -                                        |
 | **08** | Mid-Project Review & Architecture Audit            | ⏳ Terjadwal |                                        -                                        |
