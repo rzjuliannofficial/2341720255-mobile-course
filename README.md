@@ -157,7 +157,7 @@ Format penamaan direktori setiap modul praktikum menggunakan konvensi `_XX_week_
 | **03** | Navigation & State Management                      |  ✅ Selesai  |         [Modul 03](./_03_week_3_navigation_state_management/README.md)         |
 | **04** | Networking & REST API Integration                  |  ✅ Selesai  |             [Modul 04](./_04_week_4_networking_rest_api/README.md)             |
 | **05** | Local Storage & Offline-First Persistence          |  ✅ Selesai  |     [Modul 05](./_05_week_5_local_storage_offline_first/README.md)     |
-| **06** | Authentication, Mobile Security & FCM              | ⏳ Terjadwal |                                        -                                        |
+| **06** | Authentication, Mobile Security & FCM              |  ✅ Selesai  |       [Modul 06](./_06_week_6_authentication_security_fcm/README.md)       |
 | **07** | Clean Architecture & Domain-Driven Design          | ⏳ Terjadwal |                                        -                                        |
 | **08** | Mid-Project Review & Architecture Audit            | ⏳ Terjadwal |                                        -                                        |
 | **09** | AI-Assisted Development Workflows                  | ⏳ Terjadwal |                                        -                                        |

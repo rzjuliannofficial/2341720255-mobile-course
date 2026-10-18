@@ -80,31 +80,79 @@ Sesuai instruksi penataan kode (Clean Architecture & Refactoring):
 
 ## AI Challenge: Storage Comparison & Verification Checklist
 
-Dokumentasi lengkap tersimpan pada [docs/ai_storage_comparison.md](file:///c:/laragon/www/Kuliah/2341720255-mobile-course/_05_week_5_local_storage_offline_first/docs/ai_storage_comparison.md).
+Bagian ini menyajikan dokumentasi lengkap pengerjaan **Langkah 6: AI Challenge** untuk perbandingan penyimpanan lokal, skema database, verifikasi arsitektur, dan evaluasi trade-off.
 
-### 1. Tabel Perbandingan Local Storage
+### 1. AI Prompt Eksperimen
 
+Prompt yang digunakan untuk mengevaluasi rekomendasi penyimpanan lokal:
 
-| Kriteria                 | SharedPreferences  | Hive (NoSQL)           | sqflite (SQLite)           | Drift (Reactive SQL)     |
-| :------------------------- | :------------------- | :----------------------- | :--------------------------- | :------------------------- |
-| **Model Data**           | Key-Value primitif | NoSQL Document / Box   | Relasional SQL (Tabel)     | Relasional Type-Safe     |
-| **Kompleksitas Query**   | Sangat Rendah      | Rendah (Filter Memory) | Sangat Tinggi (SQL murni)  | Sangat Tinggi (Dart DSL) |
-| **Kebutuhan Relasi**     | Tidak mendukung    | Tidak mendukung        | Penuh (Foreign Key)        | Penuh (Type-safe JOIN)   |
-| **Reaktivitas (Stream)** | Manual Notifier    | Bawaan`watch()` Box    | Via Riverpod Notifier      | Bawaan Stream Query      |
-| **Type-Safety**          | Primitif runtime   | Butuh TypeAdapter      | Mapping manual (`fromMap`) | Sangat tinggi (Code-Gen) |
-| **Ukuran Boilerplate**   | Sangat Kecil       | Sedang                 | Sedang                     | Tinggi (`build_runner`)  |
-| **Testing**              | Sangat Mudah       | Sedang                 | Sangat Mudah (Fake Repo)   | Sedang                   |
+```text
+Aplikasi Flutter Offline Notes: CRUD catatan + preferensi tema.
+Bandingkan SharedPreferences, Hive, sqflite (SQLite), dan Drift
+untuk dua kebutuhan ini. Requirements:
+- Kriteria: kompleksitas query, kebutuhan relasi, reaktivitas (stream),
+  type-safety, ukuran boilerplate, dan kemudahan testing.
+- Beri rekomendasi final: mana untuk preferensi, mana untuk catatan,
+  beserta alasannya dalam 1 tabel.
+- Tunjukkan skema tabel/kotak untuk 1000+ catatan.
+Jelaskan trade-off setiap pilihan.
+```
 
-### 2. Tabel AI Verification Checklist
+### 2. Tabel Perbandingan Teknis Local Storage
 
+| Kriteria Evaluasi | SharedPreferences | Hive (NoSQL Key-Value) | sqflite (SQLite C API) | Drift (SQLite Reactive) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Model Data** | Key-Value primitif | NoSQL Document / Box | Relasional SQL (Tabel) | Relasional SQL Type-Safe |
+| **Kompleksitas Query** | Sangat Rendah (Key lookup) | Rendah (Filter in-memory) | Sangat Tinggi (SQL murni, JOIN, GROUP) | Sangat Tinggi (Dart DSL / SQL murni) |
+| **Kebutuhan Relasi** | Tidak mendukung | Tidak mendukung (manual link) | Penuh (Foreign Key, Indexes) | Penuh (Foreign Key, Type-safe JOIN) |
+| **Reaktivitas (Stream)** | Manual / Notifier | Mendukung `watch()` Box | Perlu wrapper / Riverpod Notifier | Sangat Reaktif (Stream terintegrasi bawaan) |
+| **Type-Safety** | Primitif runtime casting | Perlu TypeAdapter generator | Manual Map mapping (`fromMap`) | Penuh (Compile-time code generation) |
+| **Ukuran Boilerplate** | Sangat Kecil (zero-config) | Sedang (TypeAdapter) | Sedang (SQL string, migrasi manual) | Tinggi (Build runner, generated tables) |
+| **Kemudahan Testing** | Sangat Mudah (Mock initial values) | Sedang (Directory mock/in-memory) | Sangat Mudah (Injeksi Fake Repo / FFI) | Sedang (Mock in-memory connection) |
+| **Performa 1000+ Item** | Buruk jika simpan JSON raksasa | Sangat Cepat (In-memory index) | Cepat (B-Tree SQLite on-disk, paging) | Cepat (B-Tree SQLite on-disk, paging) |
 
-| No | Poin Verifikasi Checklist                                |   Status   | Catatan Temuan & Keputusan Teknis                                                                                                                              |
-| :--- | :--------------------------------------------------------- | :----------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1  | **Apakah AI menempatkan catatan di SharedPreferences?**  | ❌ Ditolak | Ditolak tegas. SharedPreferences hanya untuk data primitif kecil. Menyimpan list JSON catatan di sana merusak performa I/O dan tidak mendukung query/indexing. |
-| 2  | **Apakah skema AI mendukung antrean sync (dirty flag)?** |  ✅ Lolos  | Skema SQLite menyertakan kolom`dirty INTEGER` dan `updated_at TEXT` untuk antrean sinkronisasi offline serta resolusi konflik *Last-Write-Wins*.               |
-| 3  | **Apakah klaim "real-time" didukung stream?**            |  ✅ Lolos  | Reaktivitas dikelola bersih menggunakan Riverpod`AsyncNotifier` dan invalidasi state terpusat.                                                                 |
-| 4  | **Apakah estimasi boilerplate AI masuk akal?**           |  ✅ Lolos  | Drift membutuhkan proses code-gen berat, sedangkan`sqflite` memberikan keseimbangan kontrol dan efisiensi yang optimal.                                        |
-| 5  | **Keputusan Final Arsitektur**                           |  ✅ Lolos  | **SharedPreferences** untuk preferensi tema dan riwayat buka; **sqflite** untuk data catatan dan cache respons jaringan.                                       |
+### 3. Rekomendasi Final & Keputusan Arsitektur
+
+| Kebutuhan Fitur | Teknologi Terpilih | Alasan & Justifikasi Teknis |
+| :--- | :--- | :--- |
+| **Preferensi Tema & Riwayat Buka** | `SharedPreferences` | Data bernilai primitif kecil (boolean `dark_mode`, string ISO `last_opened_at`). Tidak membutuhkan relasi, zero-overhead, dan native platform binding. |
+| **Koleksi Catatan & Cache Posts** | `sqflite (SQLite)` | Mendukung struktur data relasional, pengurutan `updated_at DESC`, query parsial, indexing, serta kolom `dirty` untuk sinkronisasi tanpa membebani memori RAM. |
+
+### 4. Skema Database (Untuk 1000+ Catatan & Antrean Sync)
+
+```sql
+-- Skema Tabel Catatan (SQLite)
+CREATE TABLE notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL DEFAULT '',
+    updated_at TEXT NOT NULL,
+    dirty INTEGER NOT NULL DEFAULT 0
+);
+
+-- Index untuk mempercepat query pengurutan dan filter antrean sync
+CREATE INDEX idx_notes_updated_at ON notes(updated_at DESC);
+CREATE INDEX idx_notes_dirty ON notes(dirty);
+
+-- Skema Tabel Cache Posts (Cache-First Read API)
+CREATE TABLE cached_posts (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL DEFAULT '',
+    body TEXT NOT NULL DEFAULT '',
+    payload TEXT NOT NULL,
+    cached_at TEXT NOT NULL
+);
+```
+
+### 5. Tabel AI Verification Checklist
+
+| No | Poin Verifikasi Checklist | Status | Catatan Temuan & Keputusan Teknis |
+| :--- | :--- | :---: | :--- |
+| 1 | **Apakah AI menempatkan catatan di SharedPreferences?** | ❌ Ditolak | Ditolak tegas. SharedPreferences hanya untuk data primitif kecil. Menyimpan list JSON catatan di sana merusak performa I/O dan tidak mendukung query/indexing. |
+| 2 | **Apakah skema AI mendukung antrean sync (dirty flag)?** | ✅ Lolos | Skema SQLite menyertakan kolom `dirty INTEGER` dan `updated_at TEXT` untuk antrean sinkronisasi offline serta resolusi konflik *Last-Write-Wins*. |
+| 3 | **Apakah klaim "real-time" didukung stream?** | ✅ Lolos | Reaktivitas dikelola bersih menggunakan Riverpod `AsyncNotifier` dan invalidasi state terpusat. |
+| 4 | **Apakah estimasi boilerplate AI masuk akal?** | ✅ Lolos | Drift membutuhkan proses code-gen berat, sedangkan `sqflite` memberikan keseimbangan kontrol dan efisiensi yang optimal. |
+| 5 | **Keputusan Final Arsitektur** | ✅ Lolos | **SharedPreferences** untuk preferensi tema dan riwayat buka; **sqflite** untuk data catatan dan cache respons jaringan. |
 
 ---
 
