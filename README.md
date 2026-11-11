@@ -103,7 +103,7 @@ Format penamaan direktori setiap modul praktikum menggunakan konvensi `_XX_week_
 ├── _09_week_9_ai_assisted_development/
 │   ├── README.md
 │   ├── lib/
-│   ├── docs/
+│   ├── test/
 │   └── screenshots/
 ├── _10_week_10_ai_feature_integration/
 │   ├── README.md
@@ -161,7 +161,7 @@ Format penamaan direktori setiap modul praktikum menggunakan konvensi `_XX_week_
 | **06** | Authentication, Mobile Security & FCM              |  ✅ Selesai  |         [Modul 06](./_06_week_6_authentication_security_fcm/README.md)         |
 | **07** | Clean Architecture & Domain-Driven Design          |  ✅ Selesai  |       [Modul 07](./_07_week_7_clean_architecture/README.md)       |
 | **08** | Mid-Project Review & Architecture Audit            |  ✅ Selesai  |       [Modul 08](./_08_week_8_mid_project_review/README.md)       |
-| **09** | AI-Assisted Development Workflows                  | ⏳ Terjadwal |                                        -                                        |
+| **09** | AI-Assisted Development Workflows                  |  ✅ Selesai  |     [Modul 09](./_09_week_9_ai_assisted_development/README.md)     |
 | **10** | AI Feature Integration & Smart Services            | ⏳ Terjadwal |                                        -                                        |
 | **11** | Performance Optimization & Memory Profiling        | ⏳ Terjadwal |                                        -                                        |
 | **12** | Testing & Quality Assurance (Unit, Widget, Golden) | ⏳ Terjadwal |                                        -                                        |
